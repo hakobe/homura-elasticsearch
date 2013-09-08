@@ -1,0 +1,20 @@
+{
+    "name": "homura-elasticsearch",
+    "version": "0.0.1",
+    "description": "a homura (IRC bouncer) module to index IRC logs to ElasticSearch",
+    "keywords" : [ "irc", "ElasticSearch"],
+    "repository" : {
+        "type" : "git",
+        "url" : "http://github.com/hakobe/homura-elasticsearch.git"
+    },
+    "keywords": [ "irc", "elasticsearch" ],
+    "author": {
+        "name": "Yohei Fushii",
+        "email": "hakobe@gmail.com",
+        "url": "http://hakobe932.hatenablog.com/"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "request": "~2.22.0"
+    }
+}
