@@ -58,8 +58,9 @@
         e.preventDefault();
         var target = $searchFrom.find('input[name=target]').val();
         var content = $searchFrom.find('input[name=content]').val();
+        var sort = content ? '' : 'timestamp'; 
 
-        search( target, content, 1 );
+        search( target, content, sort, 1 );
       });
       search('', '', 'timestamp', 1);
 
