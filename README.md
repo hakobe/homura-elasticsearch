@@ -28,3 +28,11 @@ Write module setting to `config.json` of your homur.
 
 ```
 
+## Search Interface
+
+```
+$ cd homura_workingdir/node_modules/homura-elasticsearch
+$ node client/app.js http://localhost:9200 homura
+```
+
+Access to http://localhost:3000
