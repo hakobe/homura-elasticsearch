@@ -32,8 +32,9 @@ app.get('/', function(req, res) {
 });
 
 app.get('/api/search', function(req, res) {
-    var content = req.query.content || '';
     var target = req.query.target || '';
+    var author = req.query.author || '';
+    var content = req.query.content || '';
     var sort = req.query.sort || 1;
     var page = req.query.page || 1;
 
@@ -51,6 +52,9 @@ app.get('/api/search', function(req, res) {
     var filters = [{ terms : { event : ["privmsg", "notice"] }, }];
     if (target) {
         filters.push( { term  : { target : target }, } );
+    }
+    if (author) {
+        filters.push( { term  : { author : author }, } );
     }
 
     json.query = {
