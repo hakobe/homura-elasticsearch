@@ -48,21 +48,24 @@ app.get('/api/search', function(req, res) {
         ];
     }
 
-    if (content) {
-        json.query = {
-            filtered : {
-                query : {
-                    match : { content : content },
-                },
-            },
-        };
+    var filters = [{ terms : { event : ["privmsg", "notice"] }, }];
+    if (target) {
+        filters.push( { term  : { target : target }, } );
     }
 
-    if (target) {
-        json.query.filtered.filter = {
-            term : { target : target },
-        };
+    json.query = {
+        filtered : {
+            filter : {
+                and : filters,
+            },
+        },
+    };
+
+    if (content) {
+        json.query.filtered.query = { match : { content : content } };
     }
+
+    console.dir (json);
 
     request.post(
         [ Config.apiUrl, Config.index, 'message', '_search'].join('/'),
