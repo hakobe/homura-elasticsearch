@@ -14,7 +14,13 @@
         "url": "http://hakobe932.hatenablog.com/"
     },
     "license": "MIT",
+    "main": "lib/index.js",
     "dependencies": {
         "request": "~2.22.0"
+    },
+    "optionalDependencies": {
+        "express": "~3.4.0",
+        "ejs": "*",
+        "request": "*"
     }
 }

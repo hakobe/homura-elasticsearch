@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <title>homura - elasticsearch</title>
+    <link rel=stylesheet href=//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css>
+    <meta name="viewport", content="width=device-width, initial-scale=1.0">
+    <style>
+      #search-form { margin: 1em 0; }
+      #result-table tr.notice { background-color: #f5f5f5 }
+    </style>
+  </head>
+  <body>
+    <div class=container>
+      <div class=page-header>
+        <h1>homura - elasticsearch</h1>
+      </div>
+      <div id=search-form>
+        <form class=form-inline role=form>
+          <div class=form-group>
+            <label class=sr-only for=target>target</label>
+            <input class=form-control type=text name=target placeholder="channel or user">
+          </div>
+          <div class=form-group>
+            <label class=sr-only for=content>term</label>
+            <input class=form-control type=text name=content placeholder="term">
+          </div>
+          <button type=submit class="btn btn-default">Search</button>
+        </form>
+      </div>
+      <table id=result-table class="table">
+        <tr> <th>timestamp</th> <th>target</th> <th>author</th> <th>message</th> </tr>
+      </table>
+    </div>
+    <script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script>
+      var $searchFrom = $('#search-form');
+      var $resultTable = $('#result-table');
+
+      function search(target, content, sort, page) {
+        $.get(
+          '/api/search', { target : target, content: content, sort: sort,  page : (page || 1) }
+        ).done(function(res) {
+          console.log(res);
+          $('.result-table-result-raw').remove();
+          res.results.forEach(function(result) {
+            var $tr = $($.parseHTML('<tr></tr>')).addClass(result.event).addClass('result-table-result-raw');
+            var date = new Date(result.timestamp);
+            $tr.append($($.parseHTML('<td></td>')).text( date.toLocaleString() ));
+            ['target', 'author', 'content'].forEach(function(key) {
+              $tr.append($($.parseHTML('<td></td>')).text( result[key] ));
+            });
+            $resultTable.append( $tr );
+          });
+        });
+      }
+
+      $searchFrom.find('button').click(function(e) {
+        e.preventDefault();
+        var target = $searchFrom.find('input[name=target]').val();
+        var content = $searchFrom.find('input[name=content]').val();
+
+        search( target, content, 1 );
+      });
+      search('', '', 'timestamp', 1);
+
+    </script>
+  </body>
+</html>
