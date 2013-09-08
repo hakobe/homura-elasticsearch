@@ -65,8 +65,6 @@ app.get('/api/search', function(req, res) {
         json.query.filtered.query = { match : { content : content } };
     }
 
-    console.dir (json);
-
     request.post(
         [ Config.apiUrl, Config.index, 'message', '_search'].join('/'),
         { json : json }, 
