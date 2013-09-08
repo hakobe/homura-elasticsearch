@@ -41,11 +41,11 @@
       var $resultTable = $('#result-table');
 
       function search(target, author, content, sort, page) {
+        if (!page) { page = 1 }
         $.get(
-          '/api/search', { target : target, author: author, content: content, sort: sort,  page : (page || 1) }
+          '/api/search', { target : target, author: author, content: content, sort: sort,  page : page }
         ).done(function(res) {
           console.log(res);
-          $('.result-table-result-raw').remove();
           res.results.forEach(function(result) {
             var $tr = $($.parseHTML('<tr></tr>')).addClass(result.event).addClass('result-table-result-raw');
             var date = new Date(result.timestamp);
@@ -54,9 +54,28 @@
               $tr.append($($.parseHTML('<td></td>')).text( result[key] ));
             });
             $resultTable.append( $tr );
+            $resultTable.attr({
+              'data-target'  : target,
+              'data-author'  : author,
+              'data-content' : content,
+              'data-sort'    : sort,
+              'data-page'    : page,
+            });
           });
         });
       }
+
+      function searchContinue() {
+        var target  = $resultTable.attr('data-target');
+        var author  = $resultTable.attr('data-author');
+        var content = $resultTable.attr('data-content');
+        var sort    = $resultTable.attr('data-sort');
+        var page    = $resultTable.attr('data-page');
+
+        search( target, author, content, sort, 1 + parseInt(page));
+      }
+
+      search('', '', '', 'timestamp');
 
       $searchFrom.find('button').click(function(e) {
         e.preventDefault();
@@ -65,9 +84,25 @@
         var content = $searchFrom.find('input[name=content]').val();
         var sort = content ? '' : 'timestamp'; 
 
-        search( target, author, content, sort, 1 );
+        $('.result-table-result-raw').remove();
+        search( target, author, content, sort);
       });
-      search('', '', '', 'timestamp', 1);
+
+      var $window = $(window);
+      var $document = $(document);
+      var timer;
+      $window.scroll(function() {
+          if ( ($window.height() + $window.scrollTop()) / $document.height() < 0.8 ) {
+            return;
+          }
+          if (!timer) {
+            clearTimeout(timer);
+            timer = setTimeout( function() {
+              searchContinue();
+              timer = undefined;
+            }, 800)
+          }
+      });
 
     </script>
   </body>

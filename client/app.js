@@ -1,6 +1,7 @@
 var Config = {
     apiUrl : process.argv[2],
     index  : process.argv[3],
+    perPage  : process.argv[4] || 20,
 };
 
 var request = require('request');
@@ -39,8 +40,8 @@ app.get('/api/search', function(req, res) {
     var page = req.query.page || 1;
 
     var json = {
-        from : (page - 1) * 20,
-        size : 20,
+        from : (page - 1) * Config.perPage,
+        size : Config.perPage,
     };
 
     if (sort && sort === 'timestamp') {
