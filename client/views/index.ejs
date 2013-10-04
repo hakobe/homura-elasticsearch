@@ -82,10 +82,9 @@
         var target = $searchFrom.find('input[name=target]').val();
         var author = $searchFrom.find('input[name=author]').val();
         var content = $searchFrom.find('input[name=content]').val();
-        var sort = content ? '' : 'timestamp'; 
 
         $('.result-table-result-raw').remove();
-        search( target, author, content, sort);
+        search( target, author, content, 'timestamp');
       });
 
       var $window = $(window);
